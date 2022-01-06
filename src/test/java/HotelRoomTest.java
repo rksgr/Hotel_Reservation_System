@@ -1,20 +1,27 @@
-import Service.HotelRoom;
+import model.Hotel;
+import service.HotelBook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.time.LocalDate;
 
 public class HotelRoomTest {
-    HotelRoom hotelroom = new HotelRoom();
+    HotelBook hotelroom = new HotelBook();
 
     @Test
     public void givenRoom_WhenAdded_ShouldReturnTrue(){
-        ArrayList<Object> hotel_ad = new ArrayList<>();
-        hotel_ad.add("Taj");
-        hotel_ad.add(5);
-        hotel_ad.add(200);
-        hotel_ad.add(300);
-        boolean result_hotel_added = hotelroom.addHotelRoom(hotel_ad);
+        Hotel hotel_ad = new Hotel("Taj",200);
+        boolean result_hotel_added = hotelroom.addHotel(hotel_ad);
         Assertions.assertEquals(true,result_hotel_added);
+    }
+    @Test
+    public void givenDateRange_WhenSearched_ShouldReturnCheapestHotel(){
+        // Date range
+        LocalDate localdate1 = LocalDate.of(2020,9,10);
+        LocalDate localdate2 = LocalDate.of(2020,9,11);
+        String chp_hot = hotelroom.findCheapestHotel(localdate1,localdate2);
+        System.out.println(chp_hot);
+        Assertions.assertEquals("Lakewood",chp_hot);
     }
 }
