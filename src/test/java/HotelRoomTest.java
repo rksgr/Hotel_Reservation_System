@@ -51,7 +51,7 @@ public class HotelRoomTest {
     }
 
     @Test
-    public void whenRating_SetForEachHotel_ShouldReturnRatingOfHotel(){
+    public void whenRating_SetForEachHotel_FetchRatingOfHotelByName(){
         hotelbook.addRatingsToHotel("Lakewood",3);
         hotelbook.addRatingsToHotel("Bridgewood",4);
         hotelbook.addRatingsToHotel("Ridgewood",5);
@@ -61,5 +61,21 @@ public class HotelRoomTest {
                 .filter(hotel->hotel.getHotelName()=="Lakewood").map(hotel->hotel.getRating()).findFirst().get();
 
         assertEquals(3,ratng);
+    }
+    @Test
+    public void findCheapestBestRatedHotelForGivenDateRange(){
+        // Dates for which cheapest hotel with maximum rating has to be searched
+        LocalDate locdat1 = LocalDate.of(2020,9,11);
+        LocalDate locdat2 = LocalDate.of(2020,9,12);
+
+        // Get cheapest hotel name, rating and total rate
+        String[] cheapest_max_rating_hotel = hotelbook.findCheapestBestRatedHotel(locdat1,locdat2);
+        String hotel_name = cheapest_max_rating_hotel[0];
+        String hotel_rating = cheapest_max_rating_hotel[1];
+        String hotel_total_rate = cheapest_max_rating_hotel[2];
+
+        assertEquals("Bridgewood",hotel_name);
+        assertEquals("4",hotel_rating);
+        assertEquals("200",hotel_total_rate);
     }
 }
