@@ -92,4 +92,23 @@ public class HotelRoomTest {
         assertEquals("Ridgewood",hotel_name);
         assertEquals("370",hotel_total_rate);
     }
+
+    @Test
+    public void afterSpecialRatesForRewardCustomersAdded_fetchWeekdayAndWeekendRatesForRewardCustomers(){
+        LocalDate locdat = LocalDate.of(2020,10,11);
+
+        // Add special weekday and weekend rates for reward customers
+        hotelbook.addSpecialRatesRewardCustomers("Bridgewood",110,50);
+
+        // Fetch weekday and weekend rates for reward customers
+        Integer reward_cust_weekday_rate = hotelbook.getHotelReservationSystem().stream()
+                                                    .filter(hotel->hotel.getHotelName()=="Bridgewood")
+                                                    .findFirst().get().getRewardCustWeekdayRate();
+        Integer reward_cust_weekend_rate = hotelbook.getHotelReservationSystem().stream()
+                                                    .filter(hotel->hotel.getHotelName()=="Bridgewood")
+                                                    .findFirst().get().getRewardCustWeekendRate();
+
+        assertEquals("110",String.valueOf(reward_cust_weekday_rate));
+        assertEquals("50",String.valueOf(reward_cust_weekend_rate));
+    }
 }
