@@ -1,9 +1,12 @@
+import exception.StartDateIsAfterEndDateException;
 import model.Hotel;
 import service.HotelBook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -110,5 +113,23 @@ public class HotelRoomTest {
 
         assertEquals("110",String.valueOf(reward_cust_weekday_rate));
         assertEquals("50",String.valueOf(reward_cust_weekend_rate));
+    }
+    @Test
+    public void givenDateRangeRewardCustomer_ShouldReturn_CheapestBestRatedHotel() throws StartDateIsAfterEndDateException {
+        List<String[]> hotel_name_rating_rate = null;
+        try {
+            hotel_name_rating_rate = hotelbook.findCheapstBestRatedHotelRewardCust();
+            String hotel_name = hotel_name_rating_rate.get(0)[0];
+            Integer hotel_rating = Integer.parseInt(hotel_name_rating_rate.get(0)[1]);
+            Integer hotel_rate = Integer.parseInt(hotel_name_rating_rate.get(0)[2]);
+
+            assertEquals("Ridgewood", hotel_name);
+            assertEquals(5, hotel_rating);
+            assertEquals(140, hotel_rate);
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }catch(StartDateIsAfterEndDateException e1){
+            e1.printStackTrace();
+        }
     }
 }
