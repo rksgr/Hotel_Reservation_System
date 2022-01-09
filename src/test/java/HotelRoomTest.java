@@ -78,4 +78,18 @@ public class HotelRoomTest {
         assertEquals("4",hotel_rating);
         assertEquals("200",hotel_total_rate);
     }
+
+    @Test
+    public void givenDateRange_WhenSearchBestRatedHotel_ShouldReturnBestRatedHotelAndTotalRates(){
+        // Dates for which hotel with maximum rating has to be searched
+        LocalDate locdat1 = LocalDate.of(2020,9,11);
+        LocalDate locdat2 = LocalDate.of(2020,9,12);
+
+        String[] max_rating_hotel = hotelbook.findMaxRatedHotel(locdat1,locdat2);
+        String hotel_name = max_rating_hotel[0];
+        String hotel_total_rate = max_rating_hotel[1];
+
+        assertEquals("Ridgewood",hotel_name);
+        assertEquals("370",hotel_total_rate);
+    }
 }
