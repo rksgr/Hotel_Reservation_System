@@ -49,4 +49,17 @@ public class HotelRoomTest {
         assertEquals("Lakewood",chp_hotels.get(0)[0]);
         assertEquals("Bridgewood",chp_hotels.get(1)[0]);
     }
+
+    @Test
+    public void whenRating_SetForEachHotel_ShouldReturnRatingOfHotel(){
+        hotelbook.addRatingsToHotel("Lakewood",3);
+        hotelbook.addRatingsToHotel("Bridgewood",4);
+        hotelbook.addRatingsToHotel("Ridgewood",5);
+
+        // Get rating of hotel Lakewood
+        Integer ratng = hotelbook.getHotelReservationSystem().stream()
+                .filter(hotel->hotel.getHotelName()=="Lakewood").map(hotel->hotel.getRating()).findFirst().get();
+
+        assertEquals(3,ratng);
+    }
 }
