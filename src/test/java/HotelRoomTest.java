@@ -2,10 +2,7 @@ import model.Hotel;
 import service.HotelBook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,10 +26,8 @@ public class HotelRoomTest {
     }
     @Test
     public void givenHotels_WhenRoomRatesWeekDayWeekendAdded_ShouldContainWeekdayRates(){
-        hotelbook.addHotel(new Hotel("Lakewood",0,0));
-        hotelbook.addHotel(new Hotel("Bridgewood",0,0));
-        hotelbook.addHotel(new Hotel("Ridgewood",0,0));
         hotelbook.addWeekdayWeekendRates();
-        Assertions.assertNotEquals("Lakewood",null);
+        Integer room_rate = hotelbook.getHotelReservationSystem().get(0).getRoomRateWeekday();
+        Assertions.assertEquals(110,room_rate);
     }
 }
