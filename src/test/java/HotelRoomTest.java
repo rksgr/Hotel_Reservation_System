@@ -20,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HotelRoomTest {
     HotelBook hotelbook = new HotelBook();
 
-    @Test
+    @Test    // Test method for Use case 1
     public void givenRoom_WhenAdded_ShouldReturnTrue(){
         Hotel hotel_ad = new Hotel("Taj",200,250);
         boolean result_hotel_added = hotelbook.addHotel(hotel_ad);
         assertEquals(true,result_hotel_added);
     }
-    @Test
+    @Test    // Test method for Use case 2
     public void givenDateRange_WhenSearched_ShouldReturnCheapestHotel(){
         // Date range
         LocalDate localdate1 = LocalDate.of(2020,9,10);
@@ -35,13 +35,13 @@ public class HotelRoomTest {
         System.out.println(chp_hot);
         assertEquals("Lakewood",chp_hot);
     }
-    @Test
+    @Test    // Test method for Use case 3
     public void givenHotels_WhenRoomRatesWeekDayWeekendAdded_ShouldContainWeekdayRates(){
         hotelbook.addWeekdayWeekendRates();
         Integer room_rate = hotelbook.getHotelReservationSystem().get(0).getRoomRateWeekday();
         Assertions.assertEquals(110,room_rate);
     }
-    @Test
+    @Test    // Test method for Use case 4
     public void givenDateRange_WhenSearchCheapestHotels_ShouldReturnCheapstHotel(){
         // Add three hotels
         hotelbook.addHotel(new Hotel("Lakewood",110,90));
@@ -60,7 +60,7 @@ public class HotelRoomTest {
         assertEquals("Bridgewood",chp_hotels.get(1)[0]);
     }
 
-    @Test
+    @Test    // Test method for Use case 5
     public void whenRating_SetForEachHotel_FetchRatingOfHotelByName(){
         hotelbook.addRatingsToHotel("Lakewood",3);
         hotelbook.addRatingsToHotel("Bridgewood",4);
@@ -72,7 +72,7 @@ public class HotelRoomTest {
 
         assertEquals(3,ratng);
     }
-    @Test
+    @Test    // Test method for Use case 6
     public void findCheapestBestRatedHotelForGivenDateRange(){
         // Dates for which cheapest hotel with maximum rating has to be searched
         LocalDate locdat1 = LocalDate.of(2020,9,11);
@@ -89,7 +89,7 @@ public class HotelRoomTest {
         assertEquals("200",hotel_total_rate);
     }
 
-    @Test
+    @Test    // Test method for Use case 7
     public void givenDateRange_WhenSearchBestRatedHotel_ShouldReturnBestRatedHotelAndTotalRates(){
         // Dates for which hotel with maximum rating has to be searched
         LocalDate locdat1 = LocalDate.of(2020,9,11);
@@ -103,7 +103,7 @@ public class HotelRoomTest {
         assertEquals("370",hotel_total_rate);
     }
 
-    @Test
+    @Test    // Test method for Use case 9
     public void afterSpecialRatesForRewardCustomersAdded_fetchWeekdayAndWeekendRatesForRewardCustomers(){
         LocalDate locdat = LocalDate.of(2020,10,11);
 
@@ -125,7 +125,7 @@ public class HotelRoomTest {
     public void givenDateRangeRewardCustomer_ShouldReturn_CheapestBestRatedHotel() throws StartDateIsAfterEndDateException {
         List<String[]> hotel_name_rating_rate = null;
         try {
-            LocalDate strt_date = LocalDate.of(2020,9,111);
+            LocalDate strt_date = LocalDate.of(2020,9,11);
             LocalDate end_date = LocalDate.of(2020,9,12);
 
             hotel_name_rating_rate = hotelbook.findCheapstBestRatedHotelRewardCust(strt_date,end_date);
@@ -175,5 +175,40 @@ public class HotelRoomTest {
         catch(MonthValueCannotBeGreaterThanTwelveException e3)  { e3.printStackTrace();}
         catch(DayValueCannotBeGreaterThanThirtyOneException e4) { e4.printStackTrace();}
         catch(DateTimeException e9)     {e9.printStackTrace();}
+    }
+
+
+    @Test  // Test method for Use case 12
+    public void givenDateRangeForRegularCustomer_ShouldReturn_CheapestBestRatedHotel()
+            throws StartDateIsAfterEndDateException, YearCannotBeBefore2020AndAfter2025,
+            MonthValueCannotBeGreaterThanTwelveException, DayValueCannotBeGreaterThanThirtyOneException,
+            CannotBookHotelForPreviousDatesException {
+        //List<String[]> hotel_name_rating_rate = null;
+
+        try {
+            Boolean isRewardCustomer = false;
+            LocalDate strt_date = LocalDate.of(2020,9,11);
+            LocalDate end_date = LocalDate.of(2020,9,12);
+            List<String[]> hotel_name_rating_rate = hotelbook.cheapestBestRatedHotelRewardCustom(strt_date,end_date,isRewardCustomer);
+            String hotel_name = hotel_name_rating_rate.get(0)[0];
+            Integer hotel_rating = Integer.parseInt(hotel_name_rating_rate.get(0)[1]);
+            Integer hotel_rate = Integer.parseInt(hotel_name_rating_rate.get(0)[2]);
+
+            assertEquals("Bridgewood", hotel_name);
+            assertEquals(4, hotel_rating);
+            assertEquals(200, hotel_rate);
+        } catch(StartDateIsAfterEndDateException e7){
+            e7.printStackTrace();
+        }
+        catch(YearCannotBeBefore2020AndAfter2025 e1)  {
+            e1.printStackTrace();}
+        catch(CannotBookHotelForPreviousDatesException e2)  {
+            e2.printStackTrace();}
+        catch(MonthValueCannotBeGreaterThanTwelveException e3)  { e3.printStackTrace();}
+        catch(DayValueCannotBeGreaterThanThirtyOneException e4) { e4.printStackTrace();}
+        catch(DateTimeException e9)     {e9.printStackTrace();}
+        catch (NoSuchElementException e5) {
+            e5.printStackTrace();
+        }
     }
 }
