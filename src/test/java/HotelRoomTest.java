@@ -1,12 +1,19 @@
-import exception.StartDateIsAfterEndDateException;
+import exception.CustomException.YearCannotBeBefore2020AndAfter2025;
+import exception.CustomException.StartDateIsAfterEndDateException;
+import exception.CustomException.MonthValueCannotBeGreaterThanTwelveException;
+import exception.CustomException.DayValueCannotBeGreaterThanThirtyOneException;
+import exception.CustomException.CannotBookHotelForPreviousDatesException;
 import model.Hotel;
 import service.HotelBook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -114,11 +121,15 @@ public class HotelRoomTest {
         assertEquals("110",String.valueOf(reward_cust_weekday_rate));
         assertEquals("50",String.valueOf(reward_cust_weekend_rate));
     }
-    @Test
+    @Test  // Test method for Use case 10
     public void givenDateRangeRewardCustomer_ShouldReturn_CheapestBestRatedHotel() throws StartDateIsAfterEndDateException {
         List<String[]> hotel_name_rating_rate = null;
         try {
-            hotel_name_rating_rate = hotelbook.findCheapstBestRatedHotelRewardCust();
+            LocalDate strt_date = LocalDate.of(2020,9,111);
+            LocalDate end_date = LocalDate.of(2020,9,12);
+
+            hotel_name_rating_rate = hotelbook.findCheapstBestRatedHotelRewardCust(strt_date,end_date);
+
             String hotel_name = hotel_name_rating_rate.get(0)[0];
             Integer hotel_rating = Integer.parseInt(hotel_name_rating_rate.get(0)[1]);
             Integer hotel_rate = Integer.parseInt(hotel_name_rating_rate.get(0)[2]);
@@ -131,5 +142,38 @@ public class HotelRoomTest {
         }catch(StartDateIsAfterEndDateException e1){
             e1.printStackTrace();
         }
+    }
+    @Test // Test method for Use case 11
+    public void givenDateRangeForRewardCustomer_ShouldReturn_CheapestBestRatedHotel()
+            throws StartDateIsAfterEndDateException, YearCannotBeBefore2020AndAfter2025,
+            MonthValueCannotBeGreaterThanTwelveException, DayValueCannotBeGreaterThanThirtyOneException,
+            CannotBookHotelForPreviousDatesException {
+
+        try {
+            Boolean isRewardCustomer = true;
+            LocalDate strt_date = LocalDate.of(2020,9,11);
+            LocalDate end_date = LocalDate.of(2020,9,12);
+
+            List<String[]> hotel_name_rating_rate = hotelbook.cheapestBestRatedHotelRewardCustom(strt_date,end_date,isRewardCustomer);
+
+            String hotel_name = hotel_name_rating_rate.get(0)[0];
+            Integer hotel_rating = Integer.parseInt(hotel_name_rating_rate.get(0)[1]);
+            Integer hotel_rate = Integer.parseInt(hotel_name_rating_rate.get(0)[2]);
+
+            assertEquals("Ridgewood", hotel_name);
+            assertEquals(5, hotel_rating);
+            assertEquals(140, hotel_rate);
+        } catch (NoSuchElementException e5) {
+            e5.printStackTrace();
+        }catch(StartDateIsAfterEndDateException e7){
+            e7.printStackTrace();
+        }
+        catch(YearCannotBeBefore2020AndAfter2025 e1)  {
+            e1.printStackTrace();}
+        catch(CannotBookHotelForPreviousDatesException e2)  {
+            e2.printStackTrace();}
+        catch(MonthValueCannotBeGreaterThanTwelveException e3)  { e3.printStackTrace();}
+        catch(DayValueCannotBeGreaterThanThirtyOneException e4) { e4.printStackTrace();}
+        catch(DateTimeException e9)     {e9.printStackTrace();}
     }
 }
